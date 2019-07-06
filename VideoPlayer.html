@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<!-- jQuery library -->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+<!-- Latest compiled JavaScript -->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Player</title>
+    <script type="text/javascript">
+        function init() {
+            if (typeof(Storage) !== "undefined") {
+                var likeCount = localStorage.getItem("like");
+                var dislikeCount = localStorage.getItem("dislike");
+                if (likeCount !== undefined) {
+                    document.getElementById("likeCount").innerHTML = likeCount;
+                }
+                if (dislikeCount !== undefined) {
+                    document.getElementById("dislikeCount").innerHTML = dislikeCount;
+                }
+            }
+        }
+        function begin() {
+            var video = document.getElementById("video");
+            var btnPlay = document.getElementById("btnPlay");
+
+            btnEnable(btnPlay);
+            video.currentTime = 0;
+
+        }
+        function playVideo(url) {
+            var video = document.getElementById("video");
+            video.src = url;
+            play();
+        }
+        function play() {
+            var video = document.getElementById("video");
+            var btnPlay = document.getElementById("btnPlay");
+            var btnPause = document.getElementById("btnPause");
+            video.play();
+            btnDisable(btnPlay);
+            btnEnable(btnPause);
+            setInterval(progs, 1000);
+        }
+        function pause() {
+            var video = document.getElementById("video");
+            var btnPlay = document.getElementById("btnPlay");
+            var btnPause = document.getElementById("btnPause");
+            video.pause();
+            btnDisable(btnPause);
+            btnEnable(btnPlay);
+        }
+        function btnEnable(btn) {
+            btn.style.color='orange';
+        }
+        function btnDisable(btn) {
+            btn.style.color='gray';
+        }
+        function progs() {
+            var video = document.getElementById("video");
+            var prop = document.getElementById("prop");
+            prop.max = video.duration;
+            prop.value = video.currentTime;
+            video.onended = function() {
+                begin();
+            }
+        }
+        function increase() {
+           var video = document.getElementById("video");
+           if (video.volume >= 1) {
+                video.volume = 1;
+            } else {
+                video.volume += 0.1;
+            }
+        }
+        function decrease() {
+            var video = document.getElementById("video");
+            if (video.volume <= 0) {
+                video.volume = 0;
+            } else {
+                video.volume -= 0.1;
+            }
+        }
+        function restart() {
+            var video = document.getElementById("video");
+            video.currentTime = 0;
+            play();
+        }
+        function mute() {
+            var video = document.getElementById("video");
+            if (video.muted) {
+                video.muted = false;
+            } else {
+                video.muted = true;
+            }
+        }
+        function clickLike() {
+            if (typeof(Storage) !== "undefined") {
+                var count = localStorage.getItem("like");
+                if (count !== undefined) {
+                    var count = Number(localStorage.getItem("like"));
+                    localStorage.setItem("like", count+1);
+                } else {
+                    localStorage.setItem("like", 1);
+                }
+                var count = localStorage.getItem("like");
+                document.getElementById("likeCount").innerHTML = count;
+            }
+        }
+        function clickDislike() {
+            if (typeof(Storage) !== "undefined") {
+                var count = localStorage.getItem("dislike");
+                if (count !== undefined) {
+                    var count = Number(localStorage.getItem("dislike"));
+                    localStorage.setItem("dislike", count+1);
+                } else {
+                    localStorage.setItem("dislike", 1);
+                }
+                var count = localStorage.getItem("dislike");
+                document.getElementById("dislikeCount").innerHTML = count;
+            }
+        }
+    </script>
+    <style type="text/css">
+        .div-left{background:red;width:800px;height:540px;float:left;}
+        .div-right{background:yellow;width:40%;height:370px;float:left;}
+        .div-video{position:absolute;top:20px;left:20px;}
+        .svg{width:950px;height:650px;}
+        .svg-right{width:320px;height:85px;}
+        .rect-up{fill:rgb(0,80,120);stroke-width:20;stroke:yellow;}
+        .rect-down{fill:yellow;stroke-width:20;stroke:yellow;}
+        .play{position:absolute;top:424px;left:18px;}
+        .pause{position:absolute;top:424px;left:86px;}
+        .plus{position:absolute;top:424px;left:156px;}
+        .minus{position:absolute;top:424px;left:223px;}
+        .stop{position:absolute;top:424px;left:293px;}
+        .headphones{position:absolute;top:424px;left:365px;}
+        .thumbs-up{position:absolute;top:424px;left:464px;}
+        .thumbs-down{position:absolute;top:424px;left:568px;}
+        .div-like{position:absolute;top:430px;left:518px;}
+        .div-dislike{position:absolute;top:430px;left:618px;}
+        .div-prop{position:absolute;top:500px;left:17px}
+        .like{color:green;font-size:25px;}
+        .dislike{color:red;font-size:25px;}
+        .prop{width:760px;height:20px;color:orange;background:rgb(0,80,120);border:none;}
+        .text{color:green;font-size:25px;}
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div class="div-left">
+            <div>
+                <svg class="svg">
+                    <rect x="10" y="10" width="780" height="400" class="rect-up" />
+                    <rect x="10" y="420" width="780" height="110" class="rect-down" />
+                    <circle cx="40" cy="450" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    <circle cx="110" cy="450" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    <circle cx="180" cy="450" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    <circle cx="250" cy="450" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    <circle cx="320" cy="450" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    <circle cx="390" cy="450" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                </svg>
+            </div>
+            <div class="div-video">
+                <video width="760" height="380" id="video" style="object-fit:fill;">
+                    <source src="movie.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="play">
+                <span class="glyphicon glyphicon-play" style="color:orange;font-size:50px;" id="btnPlay" onclick="play()"></span>
+            </div>
+            <div class="pause">
+                <span class="glyphicon glyphicon-pause" style="color:gray;font-size:50px;" id="btnPause" onclick="pause()"></span>
+            </div>
+            <div class="plus">
+                <span class="glyphicon glyphicon-plus" style="color:orange;font-size:50px;" id="btnPlus" onclick="increase()"></span>
+            </div>
+            <div class="minus">
+                <span class="glyphicon glyphicon-minus" style="color:orange;font-size:50px;" id="btnMinus" onclick="decrease()"></span>
+            </div>
+            <div class="stop">
+                <span class="glyphicon glyphicon-stop" style="color:orange;font-size:50px;" id="btnRestart" onclick="restart()"></span>
+            </div>
+            <div class="headphones">
+                <span class="glyphicon glyphicon-headphones" style="color:orange;font-size:50px;" id="btnMute" onclick="mute()"></span>
+            </div>
+            <div class="thumbs-up">
+                <span class="glyphicon glyphicon-thumbs-up" style="color:green;font-size:50px;" onclick="clickLike()"></span>
+            </div>
+            <div class="div-like">
+                <span class="like" id="likeCount">0</span>
+            </div>
+            <div class="thumbs-down">
+                <span class="glyphicon glyphicon-thumbs-down" style="color:red;font-size:50px;" onclick="clickDislike()"></span>
+            </div>
+            <div class="div-dislike">
+                <span class="dislike" id="dislikeCount">0</span>
+            </div>
+            <div class="div-prop">
+                <progress value="0" max="0" id="prop" class="prop"></progress>
+            </div>
+        </div>
+        <div class="div-right">
+            <div style="background-color:yellow;">
+                    <!-- video1 -->
+                    <svg class="svg-right">
+                        <circle cx="30" cy="50" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    </svg>
+                    <div style="margin-left:8px;margin-top:-63px;" id="div1">
+                        <span class="glyphicon glyphicon-play" style="color:orange;font-size:50px;" onclick="playVideo('mov_bbb.mp4')"></span>
+                    </div>
+                    <div style="margin-left:65px;margin-top:-46px;font-size:20px;color:green;">
+                        Introduction to HTML5
+                    </div>
+                    <!-- video2 -->
+                    <svg class="svg-right">
+                        <circle cx="30" cy="50" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    </svg>
+                    <div style="margin-left:8px;margin-top:-63px;">
+                        <span class="glyphicon glyphicon-play" style="color:orange;font-size:50px;" onclick="playVideo('https://vjs.zencdn.net/v/oceans.mp4')"></span>
+                    </div>
+                    <div style="margin-left:65px;margin-top:-46px;font-size:20px;color:green;">Introduction to Styling with CSS3</div>
+                    <!-- video3 -->
+                    <svg class="svg-right">
+                        <circle cx="30" cy="50" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    </svg>
+                    <div style="margin-left:8px;margin-top:-63px;">
+                        <span class="glyphicon glyphicon-play" style="color:orange;font-size:50px;" onclick="playVideo('movie.mp4')"></span>
+                    </div>
+                    <div style="margin-left:65px;margin-top:-46px;font-size:20px;color:green;">Introduction to Bootstrap 4</div>
+                    <!-- video4 -->
+                    <svg class="svg-right">
+                        <circle cx="30" cy="50" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    </svg>
+                    <div style="margin-left:8px;margin-top:-63px;">
+                        <span class="glyphicon glyphicon-play" style="color:orange;font-size:50px;" onclick="playVideo('mov_bbb.mp4')"></span>
+                    </div>
+                    <div style="margin-left:65px;margin-top:-46px;font-size:20px;color:green;">Learn to create website with HTML5, CSS3 and Bootstrap4</div>
+                    <!-- video5 -->
+                    <svg class="svg-right">
+                        <circle cx="30" cy="50" r="30" stroke="yellow" stroke-width="0" fill="rgb(0,80,120)" />
+                    </svg>
+                    <div style="margin-left:8px;margin-top:-63px;">
+                        <span class="glyphicon glyphicon-play" style="color:orange;font-size:50px;" onclick="playVideo('https://vjs.zencdn.net/v/oceans.mp4')"></span>
+                    </div>
+                    <div style="margin-left:65px;margin-top:-46px;font-size:20px;color:green;">Introduction to Javascript</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        init();
+    </script>
+</body>
+</html>
